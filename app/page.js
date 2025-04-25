@@ -1,9 +1,11 @@
-import Image from "next/image";
+import { UserButton } from "@clerk/nextjs"
 
-export default function Home() {
+const SetupPage = () => {
   return (
-    <div>
-      hello world
+    <div className="p-8">
+      <UserButton afterSwitchSessionUrl="/" />
     </div>
   );
 }
+
+export default SetupPage;
