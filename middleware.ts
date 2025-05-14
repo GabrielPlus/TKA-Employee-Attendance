@@ -1,13 +1,20 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-const isPublicRoute = createRouteMatcher(['/sign-in(.*)'])
+// Create a route matcher for protected routes
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)', // Protect the dashboard and all routes under it
+  // Add any other protected routes here
+]);
 
+// Configure Clerk middleware with protection
 export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
-    await auth.protect()
+  if (isProtectedRoute(req)) {
+    await auth.protect();
   }
-})
+  
+});
 
+// Keep the original matcher configuration from Clerk
 export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
@@ -15,4 +22,4 @@ export const config = {
     // Always run for API routes
     '/(api|trpc)(.*)',
   ],
-}
+};
